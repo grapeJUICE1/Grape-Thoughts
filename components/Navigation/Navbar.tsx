@@ -30,7 +30,7 @@ function Navbar() {
                 cursor={'pointer'}
                 minW={0}
               >
-                lel
+                Login/Signup
               </Button>
               <IconButton
                 aria-label='darkModeToggle'
