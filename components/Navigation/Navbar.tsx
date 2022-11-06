@@ -18,10 +18,12 @@ function Navbar() {
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <Box>
             {' '}
-            <Text fontWeight='bold'>Logo</Text>
+            <Text fontWeight='bold' pl={3}>
+              GrapeThoughts
+            </Text>
           </Box>
           <Flex alignItems={'center'}>
-            <Stack direction={'row'} spacing={7}>
+            <Stack direction={'row'} spacing={7} pr={5}>
               <Button
                 rounded={'full'}
                 variant={'link'}
