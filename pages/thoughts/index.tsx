@@ -1,14 +1,16 @@
-import { Box, Text, VStack } from '@chakra-ui/react'
+import { Box, Divider, HStack, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
+import Heart from '../../icons/Heart'
+import Star from '../../icons/Star'
 
 const data = [
   {
     id: 1,
-    body: 'random thought 1 :)',
+    body: 'right lel',
   },
   {
     id: 2,
-    body: 'random thought 2 :) dfdkfjdakf fdkfkdjf',
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non condimentum enim. Vestibulum ac est finibus, iaculis elit in, consectetur lorem. Nulla neque neque, pretium vitae tempor non, egestas nec odio. Vestibulum sit amet erat semper tortor bibendum sollicitudin non vitae dolor. Sed nec ultricies dui, vel mollis felis. Sed at suscipit ante. Aliquam sem justo, tincidunt non ligula quis, semper sagittis velit. Etiam iaculis dignissim elit, sit amet rutrum augue. Donec vulputate sem velit, non efficitur justo accumsan sit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non condimentum enim. Vestibulum ac est finibus, iaculis elit in, consectetur lorem. Nulla neque neque, pretium vitae tempor non, egestas nec odio. Vestibulum sit amet erat semper tortor bibendum sollicitudin non vitae dolor. Sed nec ultricies dui, vel mollis felis. Sed at suscipit ante. Aliquam sem justo, tincidunt non ligula quis, semper sagittis velit. Etiam iaculis dignissim elit, sit amet rutrum augue. Donec vulputate sem velit, non efficitur justo accumsan sit.',
   },
   {
     id: 3,
@@ -25,22 +27,49 @@ function thoughts() {
       {data.map((thought) => (
         <Box
           display='flex'
-          borderWidth='2px'
+          borderWidth='1.5px'
           borderRadius='lg'
           borderColor='purple.800'
           w='100%'
           maxW={{ base: '90vw', sm: '80vw', lg: '60vw', xl: '50vw' }}
-          h='100vh'
-          maxH={{ base: '80vh', sm: '70vh', lg: '50vh', xl: '40vh' }}
-          py={10}
+          h='auto'
+          pt={10}
           px={5}
           mb='10 !important'
           key={thought.id}
           alignItems='center'
+          _hover={{ bg: 'gray.700' }}
+          _focus={{ boxShadow: 'outline' }}
         >
-          <Text fontWeight='semibold' wordBreak='break-word' textAlign='center'>
-            {thought.body}
-          </Text>
+          <VStack mx='auto'>
+            <Text
+              mx='auto'
+              fontSize='1.2rem'
+              wordBreak='break-word'
+              textAlign='center'
+            >
+              {thought.body}
+            </Text>
+            <Divider width='40vw' borderColor='purple.800' />
+            <HStack pb='3' pt='3'>
+              <Heart
+                _hover={{ fill: 'red.500' }}
+                height='1.5rem'
+                width='1.5rem'
+                fill='none'
+                stroke='red.500'
+              />
+              <p style={{ paddingRight: '1.5rem' }}>Like</p>
+              <Star
+                _hover={{ fill: 'orange.400' }}
+                height='1.5rem'
+                width='1.5rem'
+                fill='none'
+                stroke='orange.400'
+              />
+              <p>Favorite</p>
+            </HStack>
+          </VStack>
         </Box>
       ))}
     </VStack>
