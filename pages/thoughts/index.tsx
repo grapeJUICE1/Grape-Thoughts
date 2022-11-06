@@ -1,4 +1,11 @@
-import { Box, Divider, HStack, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Divider,
+  HStack,
+  Text,
+  useColorMode,
+  VStack,
+} from '@chakra-ui/react'
 import React from 'react'
 import Heart from '../../icons/Heart'
 import Star from '../../icons/Star'
@@ -21,7 +28,9 @@ const data = [
     body: 'random thought 4 :) dfdkfjdakf fdkfkdjf',
   },
 ]
+
 function thoughts() {
+  const { colorMode } = useColorMode()
   return (
     <VStack mt={10}>
       {data.map((thought) => (
@@ -38,7 +47,7 @@ function thoughts() {
           mb='10 !important'
           key={thought.id}
           alignItems='center'
-          _hover={{ bg: 'gray.700' }}
+          _hover={{ bg: colorMode === 'dark' ? 'gray.700' : 'gray.200' }}
           _focus={{ boxShadow: 'outline' }}
         >
           <VStack mx='auto'>
