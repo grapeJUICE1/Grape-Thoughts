@@ -9,6 +9,7 @@ import {
   IconButton,
 } from '@chakra-ui/react'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
+import Link from 'next/link'
 
 function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode()
@@ -19,7 +20,7 @@ function Navbar() {
           <Box>
             {' '}
             <Text fontWeight='bold' pl={3}>
-              GrapeThoughts
+              <Link href='/'>GrapeThoughts </Link>
             </Text>
           </Box>
           <Flex alignItems={'center'}>
@@ -30,7 +31,7 @@ function Navbar() {
                 cursor={'pointer'}
                 minW={0}
               >
-                Login/Signup
+                <Link href='/auth'>Login/Signup</Link>
               </Button>
               <IconButton
                 aria-label='darkModeToggle'
