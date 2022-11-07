@@ -1,5 +1,7 @@
+import Bookmarks from '../components/Bookmarks'
+
 function bookmarks() {
-  return <div>bookmarks</div>
+  return <Bookmarks />
 }
 
 export default bookmarks
