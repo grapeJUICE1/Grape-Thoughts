@@ -10,12 +10,17 @@ import {
   Heading,
   useColorModeValue,
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { SyntheticEvent, useRef, useState } from 'react'
 
 function AuthCard() {
   type authType = 'login' | 'signup'
   const [authType, setAuthType] = useState<authType>('login')
+  const emailRef = useRef<HTMLInputElement>(null)
+  const passwordRef = useRef<HTMLInputElement>(null)
 
+  function submitHandler(evt: SyntheticEvent) {
+    evt.preventDefault()
+  }
   return (
     <Flex
       minH={'100vh'}
@@ -36,50 +41,56 @@ function AuthCard() {
           p={8}
         >
           <Stack spacing={4}>
-            <FormControl id='email'>
-              <FormLabel>Email address</FormLabel>
+            <form onSubmit={submitHandler}>
+              <FormControl id='email'>
+                <FormLabel>Email address</FormLabel>
 
-              <Input
-                type='email'
-                _focus={{
-                  borderColor: 'purple.400',
-                  boxShadow: '0 0 1px #6B46C1',
-                }}
-              />
-            </FormControl>
+                <Input
+                  type='email'
+                  _focus={{
+                    borderColor: 'purple.400',
+                    boxShadow: '0 0 1px #6B46C1',
+                  }}
+                  ref={emailRef}
+                />
+              </FormControl>
 
-            <FormControl id='password'>
-              <FormLabel>Password</FormLabel>
+              <FormControl id='password' mt={6}>
+                <FormLabel>Password</FormLabel>
 
-              <Input
-                type='password'
-                _focus={{
-                  borderColor: 'purple.400',
-                  boxShadow: '0 0 1px #6B46C1',
-                }}
-              />
-            </FormControl>
-            <Stack spacing={10}>
-              <Button
-                bg={'purple.600'}
-                color={'white'}
-                _hover={{
-                  bg: 'purple.800',
-                }}
-              >
-                {authType === 'login' ? 'Log in' : 'Sign up'}
-              </Button>
-              <Link
-                onClick={() =>
-                  setAuthType(authType === 'login' ? 'signup' : 'login')
-                }
-                color='purple.500'
-                textAlign='center'
-                fontSize='1.1rem'
-              >
-                Switch to {authType === 'login' ? 'Sign up' : 'Log in'}
-              </Link>
-            </Stack>
+                <Input
+                  type='password'
+                  _focus={{
+                    borderColor: 'purple.400',
+                    boxShadow: '0 0 1px #6B46C1',
+                  }}
+                  ref={passwordRef}
+                />
+              </FormControl>
+              <Stack spacing={10}>
+                <Button
+                  mt={6}
+                  bg={'purple.600'}
+                  color={'white'}
+                  _hover={{
+                    bg: 'purple.800',
+                  }}
+                  type='submit'
+                >
+                  {authType === 'login' ? 'Log in' : 'Sign up'}
+                </Button>
+                <Link
+                  onClick={() =>
+                    setAuthType(authType === 'login' ? 'signup' : 'login')
+                  }
+                  color='purple.500'
+                  textAlign='center'
+                  fontSize='1.1rem'
+                >
+                  Switch to {authType === 'login' ? 'Sign up' : 'Log in'}
+                </Link>
+              </Stack>
+            </form>
           </Stack>
         </Box>
       </Stack>
