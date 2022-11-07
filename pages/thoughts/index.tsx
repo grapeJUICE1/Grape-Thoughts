@@ -7,8 +7,8 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import React from 'react'
+import Bookmark from '../../icons/Bookmark'
 import Heart from '../../icons/Heart'
-import Star from '../../icons/Star'
 
 const data = [
   {
@@ -71,7 +71,7 @@ function thoughts() {
                 stroke='red.500'
               />
               <p style={{ paddingRight: '1.5rem' }}>Like</p>
-              <Star
+              <Bookmark
                 _hover={{ fill: 'orange.400' }}
                 _active={{ fill: 'orange.200' }}
                 _focus={{ fill: 'red.700' }}
@@ -80,7 +80,7 @@ function thoughts() {
                 fill='none'
                 stroke='orange.400'
               />
-              <p>Favorite</p>
+              <p>Bookmark</p>
             </HStack>
           </VStack>
         </Box>
