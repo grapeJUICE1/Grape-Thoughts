@@ -14,8 +14,8 @@ import Link from 'next/link'
 function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode()
   return (
-    <>
-      <Box bg={useColorModeValue('gray.300', 'gray.900')} px={4}>
+    <div style={{ position: 'sticky', top: 0 }}>
+      <Box pos='relative' bg={useColorModeValue('gray.300', 'gray.900')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <Box>
             {' '}
@@ -43,7 +43,7 @@ function Navbar() {
           </Flex>
         </Flex>
       </Box>
-    </>
+    </div>
   )
 }
 
