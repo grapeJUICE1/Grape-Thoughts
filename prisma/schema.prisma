@@ -21,8 +21,8 @@ model User {
 model Thought {
   id           String     @id @default(uuid())
   body         String
-  user         User       @relation(fields: [userId], references: [id])
-  userId       String
+  user         User       @relation(fields: [userId], references: [id]) @ignore
+  userId       String     @ignore
   BookmarkedBy Bookmark[]
   Likes        Like[]
 }
