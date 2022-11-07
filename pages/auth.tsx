@@ -1,7 +1,8 @@
 import React from 'react'
+import AuthCard from '../components/AuthCard'
 
 function auth() {
-  return <h1>auth</h1>
+  return <AuthCard />
 }
 
 export default auth
