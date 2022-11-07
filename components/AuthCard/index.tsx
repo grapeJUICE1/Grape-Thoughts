@@ -12,14 +12,39 @@ import {
 } from '@chakra-ui/react'
 import { SyntheticEvent, useRef, useState } from 'react'
 
+async function createUser(email: string, password: string) {
+  const response = await fetch('/api/auth/signup', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Something went wrong')
+  }
+}
+
 function AuthCard() {
   type authType = 'login' | 'signup'
   const [authType, setAuthType] = useState<authType>('login')
-  const emailRef = useRef<HTMLInputElement>(null)
-  const passwordRef = useRef<HTMLInputElement>(null)
+  const emailInputRef = useRef<HTMLInputElement>(null)
+  const passwordInputRef = useRef<HTMLInputElement>(null)
 
-  function submitHandler(evt: SyntheticEvent) {
+  async function submitHandler(evt: SyntheticEvent) {
     evt.preventDefault()
+    const email = emailInputRef.current?.value
+    const password = passwordInputRef.current?.value
+    if (authType === 'login') {
+    } else {
+      if (!email || !password) {
+        return
+      }
+      await createUser(email, password)
+    }
   }
   return (
     <Flex
@@ -51,7 +76,7 @@ function AuthCard() {
                     borderColor: 'purple.400',
                     boxShadow: '0 0 1px #6B46C1',
                   }}
-                  ref={emailRef}
+                  ref={emailInputRef}
                 />
               </FormControl>
 
@@ -64,7 +89,7 @@ function AuthCard() {
                     borderColor: 'purple.400',
                     boxShadow: '0 0 1px #6B46C1',
                   }}
-                  ref={passwordRef}
+                  ref={passwordInputRef}
                 />
               </FormControl>
               <Stack spacing={10}>
