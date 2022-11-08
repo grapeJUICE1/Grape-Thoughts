@@ -26,6 +26,7 @@ const data = [
     body: 'random thought 4 :) dfdkfjdakf fdkfkdjf',
   },
 ]
+
 function Thoughts() {
   const { colorMode } = useColorMode()
   const { isOpen, onOpen, onClose } = useDisclosure()

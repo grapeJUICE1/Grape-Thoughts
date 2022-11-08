@@ -6,7 +6,6 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Textarea,
@@ -19,6 +18,19 @@ function SubmitThoughtModal({
   isOpen: boolean
   onClose: () => void
 }) {
+  async function createThought() {
+    const response = await fetch('/api/thoughts', {
+      method: 'POST',
+      body: JSON.stringify({ thought: 'lel' }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    const data = await response.json()
+
+    console.log(data)
+  }
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -44,6 +56,7 @@ function SubmitThoughtModal({
             ml={6}
             mt={5}
             mb={10}
+            onClick={createThought}
           >
             Submit
           </Button>

@@ -5,8 +5,9 @@ import prisma from '../../../lib/prisma'
 import AppError from '../../../lib/AppError'
 
 export const authOptions: NextAuthOptions = {
-  session: { strategy: 'jwt' },
+  // session: { strategy: 'jwt' },
   providers: [
+    //@ts-ignore
     CredentialsProvider({
       //@ts-ignore
       async authorize(credentials: any) {
@@ -23,8 +24,7 @@ export const authOptions: NextAuthOptions = {
         const passwordIsValid = await verify(user.password, password)
 
         if (!passwordIsValid) throw new AppError('password', 'Invalid Password')
-
-        return { user: user }
+        return { email: user.email }
       },
     }),
   ],
