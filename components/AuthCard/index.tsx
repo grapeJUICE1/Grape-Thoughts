@@ -8,9 +8,17 @@ import {
   Link,
   Button,
   Heading,
+  Text,
   useColorModeValue,
 } from '@chakra-ui/react'
 import { SyntheticEvent, useRef, useState } from 'react'
+import { signIn } from 'next-auth/react'
+
+const validateEmail = (email: string) => {
+  return email.match(
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  )
+}
 
 async function createUser(email: string, password: string) {
   const response = await fetch('/api/auth/signup', {
@@ -31,6 +39,10 @@ async function createUser(email: string, password: string) {
 function AuthCard() {
   type authType = 'login' | 'signup'
   const [authType, setAuthType] = useState<authType>('login')
+
+  const [emailErrorMsg, setEmailErrorMsg] = useState('')
+  const [passwordErrorMsg, setPasswordErrorMsg] = useState('')
+
   const emailInputRef = useRef<HTMLInputElement>(null)
   const passwordInputRef = useRef<HTMLInputElement>(null)
 
@@ -38,12 +50,42 @@ function AuthCard() {
     evt.preventDefault()
     const email = emailInputRef.current?.value
     const password = passwordInputRef.current?.value
-    if (authType === 'login') {
+
+    //validation checks
+    let formInvalid = false
+    if (!email) {
+      setEmailErrorMsg("Email can't be empty")
+      formInvalid = true
+    } else if (!validateEmail(email)) {
+      setEmailErrorMsg('Email must be a valid email')
+      formInvalid = true
     } else {
-      if (!email || !password) {
-        return
-      }
-      await createUser(email, password)
+      setEmailErrorMsg('')
+    }
+
+    if (!password) {
+      setPasswordErrorMsg("Password can't be empty")
+      formInvalid = true
+    } else if (password.length < 8) {
+      setPasswordErrorMsg(
+        'Password must be greater than or equal to 8 characters'
+      )
+      formInvalid = true
+    } else {
+      setPasswordErrorMsg('')
+    }
+
+    if (formInvalid) return
+
+    if (authType === 'login') {
+      const result = await signIn('credentials', {
+        redirect: false,
+        email: email,
+        password: password,
+      })
+      console.log(result)
+    } else {
+      await createUser(email!, password!)
     }
   }
   return (
@@ -78,6 +120,7 @@ function AuthCard() {
                   }}
                   ref={emailInputRef}
                 />
+                {emailErrorMsg && <Text color='red.500'>{emailErrorMsg} </Text>}
               </FormControl>
 
               <FormControl id='password' mt={6}>
@@ -91,6 +134,9 @@ function AuthCard() {
                   }}
                   ref={passwordInputRef}
                 />
+                {passwordErrorMsg && (
+                  <Text color='red.500'>{passwordErrorMsg} </Text>
+                )}
               </FormControl>
               <Stack spacing={10}>
                 <Button
