@@ -13,27 +13,12 @@ import {
 } from '@chakra-ui/react'
 import { SyntheticEvent, useRef, useState } from 'react'
 import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/router'
 
 const validateEmail = (email: string) => {
   return email.match(
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   )
-}
-
-async function createUser(email: string, password: string) {
-  const response = await fetch('/api/auth/signup', {
-    method: 'POST',
-    body: JSON.stringify({ email, password }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-
-  const data = await response.json()
-
-  if (!response.ok) {
-    throw new Error(data.message || 'Something went wrong')
-  }
 }
 
 function AuthCard() {
@@ -42,12 +27,45 @@ function AuthCard() {
 
   const [emailErrorMsg, setEmailErrorMsg] = useState('')
   const [passwordErrorMsg, setPasswordErrorMsg] = useState('')
+  const [disableForm, setDisableForm] = useState(false)
 
   const emailInputRef = useRef<HTMLInputElement>(null)
   const passwordInputRef = useRef<HTMLInputElement>(null)
 
+  const [successMessage, setSuccessMessage] = useState('')
+
+  const router = useRouter()
+  console.log(disableForm)
+
+  async function createUser(email: string, password: string) {
+    const response = await fetch('/api/auth/signup', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      if (data.path === 'email') {
+        setEmailErrorMsg(data.message!)
+      }
+      if (data.path === 'password') {
+        setPasswordErrorMsg(data.message)
+      }
+    } else {
+      setSuccessMessage('Signup Successful')
+      setTimeout(() => router.replace('/thoughts'), 1000)
+    }
+  }
   async function submitHandler(evt: SyntheticEvent) {
     evt.preventDefault()
+    setDisableForm(true)
+    setEmailErrorMsg('')
+    setPasswordErrorMsg('')
+
     const email = emailInputRef.current?.value
     const password = passwordInputRef.current?.value
 
@@ -75,7 +93,10 @@ function AuthCard() {
       setPasswordErrorMsg('')
     }
 
-    if (formInvalid) return
+    if (formInvalid) {
+      setDisableForm(false)
+      return
+    }
 
     if (authType === 'login') {
       const result = await signIn('credentials', {
@@ -83,10 +104,18 @@ function AuthCard() {
         email: email,
         password: password,
       })
-      console.log(result)
+      if (result?.error?.startsWith('No')) setEmailErrorMsg(result.error)
+      if (result?.error?.startsWith('Invalid'))
+        setPasswordErrorMsg(result.error)
+
+      if (result?.ok) {
+        setSuccessMessage(`Login successful`)
+        setTimeout(() => router.replace('/thoughts'), 1000)
+      }
     } else {
       await createUser(email!, password!)
     }
+    setDisableForm(false)
   }
   return (
     <Flex
@@ -147,20 +176,26 @@ function AuthCard() {
                     bg: 'purple.800',
                   }}
                   type='submit'
+                  disabled={disableForm}
                 >
                   {authType === 'login' ? 'Log in' : 'Sign up'}
                 </Button>
-                <Link
+                <Button
                   onClick={() =>
                     setAuthType(authType === 'login' ? 'signup' : 'login')
                   }
+                  as={Link}
                   color='purple.500'
                   textAlign='center'
                   fontSize='1.1rem'
+                  disabled={disableForm}
                 >
                   Switch to {authType === 'login' ? 'Sign up' : 'Log in'}
-                </Link>
+                </Button>
               </Stack>
+              {successMessage && (
+                <Text color='green.400'>{successMessage}</Text>
+              )}
             </form>
           </Stack>
         </Box>

@@ -18,21 +18,34 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const data = req.body
 
     const { email, password } = data
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ status: 'fail', message: 'You can send empty input' })
+    if (!email) {
+      return res.status(400).json({
+        status: 'fail',
+        path: 'email',
+        message: "Email can't be empty",
+      })
+    }
+
+    if (!password) {
+      return res.status(400).json({
+        status: 'fail',
+        path: 'password',
+        message: "Password can't be empty",
+      })
     }
     const emailExists = await prisma.user.findUnique({ where: { email } })
     if (emailExists) {
-      return res
-        .status(409)
-        .json({ status: 'fail', message: 'email already exists' })
+      return res.status(409).json({
+        status: 'fail',
+        path: 'email',
+        message: 'Email already exists',
+      })
     }
 
     if (password.length < 8) {
       return res.status(400).json({
         status: 'fail',
+        path: 'password',
         message: 'Password must be greater than 8 characters',
       })
     }

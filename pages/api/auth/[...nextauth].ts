@@ -2,6 +2,7 @@ import { verify } from 'argon2'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import prisma from '../../../lib/prisma'
+import AppError from '../../../lib/AppError'
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },
@@ -13,15 +14,15 @@ export const authOptions: NextAuthOptions = {
         const password = credentials?.password
 
         if (!prisma) {
-          return null
+          throw new Error('Something went wrong')
         }
 
         const user = await prisma.user.findUnique({ where: { email } })
-        if (!user) return null
+        if (!user) throw new AppError('email', 'No User Found')
 
         const passwordIsValid = await verify(user.password, password)
 
-        if (!passwordIsValid) return null
+        if (!passwordIsValid) throw new AppError('password', 'Invalid Password')
 
         return { email: user.email }
       },
