@@ -20,7 +20,6 @@ function Thought({
       pt={10}
       px={5}
       mb='10 !important'
-      key={thought.id}
       alignItems='center'
       _hover={{ bg: colorMode === 'dark' ? 'gray.700' : 'gray.200' }}
       _focus={{ boxShadow: 'outline' }}

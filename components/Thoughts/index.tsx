@@ -1,4 +1,11 @@
-import { useColorMode, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  Center,
+  useColorMode,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
+import SubmitThoughtModal from '../SubmitThoughtModal'
 import Thought from './Thought'
 
 const data = [
@@ -21,12 +28,21 @@ const data = [
 ]
 function Thoughts() {
   const { colorMode } = useColorMode()
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
-    <VStack mt={10}>
-      {data.map((thought) => (
-        <Thought thought={thought} colorMode={colorMode} />
-      ))}
-    </VStack>
+    <>
+      <Center mt={10}>
+        <Button color='purple.500' onClick={onOpen} alignItems='center'>
+          Submit Thought
+        </Button>
+      </Center>
+      <SubmitThoughtModal isOpen={isOpen} onClose={onClose} />
+      <VStack mt={10}>
+        {data.map((thought) => (
+          <Thought key={thought.id} thought={thought} colorMode={colorMode} />
+        ))}
+      </VStack>
+    </>
   )
 }
 

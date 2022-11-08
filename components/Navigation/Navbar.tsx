@@ -10,9 +10,12 @@ import {
 } from '@chakra-ui/react'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 
 function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode()
+  const { data: session, status } = useSession()
+
   return (
     <div style={{ position: 'sticky', top: 0 }}>
       <Box pos='relative' bg={useColorModeValue('gray.300', 'gray.900')} px={4}>
@@ -31,7 +34,11 @@ function Navbar() {
                 cursor={'pointer'}
                 minW={0}
               >
-                <Link href='/auth'>Login/Signup</Link>
+                {status === 'authenticated' ? (
+                  <Link href='/me'>Me</Link>
+                ) : (
+                  <Link href='/auth'>Login/Signup</Link>
+                )}
               </Button>
               <IconButton
                 aria-label='darkModeToggle'

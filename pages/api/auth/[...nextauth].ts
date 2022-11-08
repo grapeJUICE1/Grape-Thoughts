@@ -24,7 +24,7 @@ export const authOptions: NextAuthOptions = {
 
         if (!passwordIsValid) throw new AppError('password', 'Invalid Password')
 
-        return { email: user.email }
+        return { user: user }
       },
     }),
   ],
