@@ -1,16 +1,20 @@
-import { Box, Divider, Text, VStack } from '@chakra-ui/react'
-import { Thought as ThoughtType } from '@prisma/client'
+import { Box, Divider, Text, useColorMode, VStack } from '@chakra-ui/react'
+import Link from 'next/link'
 import ActionButtons from './ActionButtons'
 
 function Thought({
   thought,
-  colorMode,
+  individual,
 }: {
   thought: { id: string; content: string }
-  colorMode: string
+  individual: boolean
 }) {
+  const { colorMode } = useColorMode()
+  if (individual) console.log('')
   return (
     <Box
+      as={Link}
+      href={`/thoughts/${thought.id}`}
       display='flex'
       borderWidth='1.5px'
       borderRadius='lg'
@@ -24,6 +28,7 @@ function Thought({
       alignItems='center'
       _hover={{ bg: colorMode === 'dark' ? 'gray.700' : 'gray.200' }}
       _focus={{ boxShadow: 'outline' }}
+      mx={individual ? 'auto' : ''}
     >
       <VStack mx='auto'>
         <Text

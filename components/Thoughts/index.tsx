@@ -5,8 +5,6 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { Thought as ThoughtType } from '@prisma/client'
-import thoughts from '../../pages/thoughts'
 import SubmitThoughtModal from '../SubmitThoughtModal'
 import Thought from './Thought'
 
@@ -34,7 +32,6 @@ function Thoughts({
 }: {
   thoughts: { id: string; content: string }[] | undefined
 }) {
-  const { colorMode } = useColorMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
@@ -46,7 +43,7 @@ function Thoughts({
       <SubmitThoughtModal isOpen={isOpen} onClose={onClose} />
       <VStack mt={10}>
         {thoughts?.map((thought) => (
-          <Thought key={thought.id} thought={thought} colorMode={colorMode} />
+          <Thought key={thought.id} thought={thought} individual={false} />
         ))}
       </VStack>
     </>
