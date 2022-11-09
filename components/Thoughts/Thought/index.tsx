@@ -1,5 +1,6 @@
 import { Box, Divider, Text, useColorMode, VStack } from '@chakra-ui/react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import ActionButtons from './ActionButtons'
 
 function Thought({
@@ -10,11 +11,10 @@ function Thought({
   individual: boolean
 }) {
   const { colorMode } = useColorMode()
+  const router = useRouter()
   if (individual) console.log('')
   return (
     <Box
-      as={Link}
-      href={`/thoughts/${thought.id}`}
       display='flex'
       borderWidth='1.5px'
       borderRadius='lg'
@@ -26,9 +26,13 @@ function Thought({
       px={5}
       mb='10 !important'
       alignItems='center'
+      cursor='pointer'
       _hover={{ bg: colorMode === 'dark' ? 'gray.700' : 'gray.200' }}
       _focus={{ boxShadow: 'outline' }}
       mx={individual ? 'auto' : ''}
+      onClick={
+        individual ? () => '' : () => router.replace(`/thoughts/${thought.id}`)
+      }
     >
       <VStack mx='auto'>
         <Text
