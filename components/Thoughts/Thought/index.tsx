@@ -1,11 +1,12 @@
 import { Box, Divider, Text, VStack } from '@chakra-ui/react'
+import { Thought as ThoughtType } from '@prisma/client'
 import ActionButtons from './ActionButtons'
 
 function Thought({
   thought,
   colorMode,
 }: {
-  thought: { id: number; body: string }
+  thought: ThoughtType
   colorMode: string
 }) {
   return (
@@ -31,7 +32,7 @@ function Thought({
           wordBreak='break-word'
           textAlign='center'
         >
-          {thought.body}
+          {thought.content}
         </Text>
         <Divider width='40vw' borderColor='purple.800' />
         <ActionButtons />
