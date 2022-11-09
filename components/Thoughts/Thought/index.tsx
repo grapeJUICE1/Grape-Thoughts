@@ -6,7 +6,7 @@ function Thought({
   thought,
   colorMode,
 }: {
-  thought: ThoughtType
+  thought: { id: string; content: string }
   colorMode: string
 }) {
   return (

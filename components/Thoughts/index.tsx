@@ -29,7 +29,11 @@ const data = [
   },
 ]
 
-function Thoughts({ thoughts }: { thoughts: ThoughtType[] | undefined }) {
+function Thoughts({
+  thoughts,
+}: {
+  thoughts: { id: string; content: string }[] | undefined
+}) {
   const { colorMode } = useColorMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
