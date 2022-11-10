@@ -60,6 +60,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             status: 'success',
             isOperational: true,
             message: 'Thought created',
+            thoughtId: newThought.id,
           })
         }
       } else {

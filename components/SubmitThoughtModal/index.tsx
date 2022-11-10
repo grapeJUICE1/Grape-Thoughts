@@ -10,8 +10,10 @@ import {
   ModalOverlay,
   Text,
   Textarea,
+  useToast,
 } from '@chakra-ui/react'
-import { SyntheticEvent, useRef, useState } from 'react'
+import { useRouter } from 'next/router'
+import { SyntheticEvent, useState } from 'react'
 
 function SubmitThoughtModal({
   isOpen,
@@ -25,8 +27,13 @@ function SubmitThoughtModal({
   const [formMsg, setFormMsg] = useState({ success: true, msg: '' })
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true)
   const [inputDisabled, setInputDisabled] = useState(false)
-
+  const router = useRouter()
+  const toast = useToast()
   async function createThought(content: string) {
+    toast({
+      title: 'Please wait for a few seconds',
+      isClosable: true,
+    })
     const response = await fetch('/api/thoughts', {
       method: 'POST',
       body: JSON.stringify({ content }),
@@ -36,16 +43,33 @@ function SubmitThoughtModal({
     })
 
     const data = await response.json()
+    toast.closeAll()
     if (data.isOperational === true) {
       if (data.path === 'content') {
         setContentMsg(data.message)
       } else if (data.status === 'success') {
-        setFormMsg({ success: true, msg: 'Thought created successfully' })
+        toast({
+          title: 'Thought created successfully',
+          status: 'success',
+          duration: 1000,
+        })
+        // setFormMsg({ success: true, msg: 'Thought created successfully' })
+        setTimeout(() => router.replace(`/thoughts/${data.thoughtId}`), 1000)
       } else if (data.status === 'fail') {
-        setFormMsg({ success: false, msg: data.message })
+        toast({
+          title: data.message,
+          status: 'error',
+          duration: 1000,
+        })
+        // setFormMsg({ success: false, msg: data.message })
       }
     } else if (!response.ok) {
-      setFormMsg({ success: false, msg: 'Something went wrong' })
+      toast({
+        title: 'Something went wrong',
+        status: 'error',
+        duration: 1000,
+      })
+      // setFormMsg({ success: false, msg: 'Something went wrong' })
     }
     setSubmitButtonDisabled(false)
     setInputDisabled(false)

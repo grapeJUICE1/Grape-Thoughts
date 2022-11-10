@@ -1,4 +1,11 @@
-import { Box, Divider, Text, useColorMode, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Divider,
+  Text,
+  useColorMode,
+  useToast,
+  VStack,
+} from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import ActionButtons from './ActionButtons'
@@ -13,8 +20,9 @@ function Thought({
   const { colorMode } = useColorMode()
   const router = useRouter()
   const [thought, setThought] = useState(() => initialThought)
-
+  const toast = useToast()
   async function like() {
+    toast({ title: 'Please wait for a few seconds', isClosable: true })
     const response = await fetch(`/api/like/${thought.id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -22,6 +30,13 @@ function Thought({
     const data = await response.json()
 
     if (data.status === 'success') {
+      toast.closeAll()
+      toast({
+        title: data.message,
+        status: 'success',
+        duration: 1000,
+        isClosable: true,
+      })
       if (data.type === 'like') {
         const newThought = {
           ...thought,
