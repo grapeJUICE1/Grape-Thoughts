@@ -1,18 +1,31 @@
 import { Box, Divider, Text, useColorMode, VStack } from '@chakra-ui/react'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 import ActionButtons from './ActionButtons'
 
 function Thought({
-  thought,
+  initialThought,
   individual,
 }: {
-  thought: { id: string; content: string }
+  initialThought: { id: string; content: string }
   individual: boolean
 }) {
   const { colorMode } = useColorMode()
   const router = useRouter()
-  if (individual) console.log('')
+  const [thought, setThought] = useState(() => initialThought)
+
+  async function like() {
+    const response = await fetch(`/api/like/${thought.id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    const data = await response.json()
+
+    if (data.newThought) {
+      console.log(data)
+      setThought(data.newThought)
+    }
+  }
   return (
     <Box
       display='flex'
@@ -30,9 +43,9 @@ function Thought({
       _hover={{ bg: colorMode === 'dark' ? 'gray.700' : 'gray.200' }}
       _focus={{ boxShadow: 'outline' }}
       mx={individual ? 'auto' : ''}
-      onClick={
-        individual ? () => '' : () => router.replace(`/thoughts/${thought.id}`)
-      }
+      // onClick={
+      //   individual ? () => '' : () => router.replace(`/thoughts/${thought.id}`)
+      // }
     >
       <VStack mx='auto'>
         <Text
@@ -44,7 +57,7 @@ function Thought({
           {thought.content}
         </Text>
         <Divider width='40vw' borderColor='purple.800' />
-        <ActionButtons />
+        <ActionButtons likeFunc={like} />
       </VStack>
     </Box>
   )

@@ -18,7 +18,11 @@ function Thoughts({
       <SubmitThoughtModal isOpen={isOpen} onClose={onClose} />
       <VStack mt={10}>
         {thoughts?.map((thought) => (
-          <Thought key={thought.id} thought={thought} individual={false} />
+          <Thought
+            key={thought.id}
+            initialThought={thought}
+            individual={false}
+          />
         ))}
       </VStack>
       <Button
