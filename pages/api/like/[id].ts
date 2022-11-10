@@ -29,7 +29,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         if (likeExists) {
           const like = await prisma.like.delete({
             where: { id: likeExists.id },
-            include: { thought: true },
+            include: {
+              thought: { include: { _count: { select: { likes: true } } } },
+            },
           })
           return res.status(201).json({
             status: 'success',
@@ -42,15 +44,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
               user: { connect: { email: session?.user?.email! } },
               thought: { connect: { id: id as string } },
             },
-            include: { thought: true },
+            include: {
+              thought: { include: { _count: { select: { likes: true } } } },
+            },
           })
           if (!like) {
-            res
-              .status(404)
-              .json({
-                status: 'fail',
-                message: 'Thought with this id not found',
-              })
+            res.status(404).json({
+              status: 'fail',
+              message: 'Thought with this id not found',
+            })
           }
           return res.status(201).json({
             status: 'success',

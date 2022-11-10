@@ -7,7 +7,7 @@ function Thought({
   initialThought,
   individual,
 }: {
-  initialThought: { id: string; content: string }
+  initialThought: { id: string; content: string; _count: { likes: number } }
   individual: boolean
 }) {
   const { colorMode } = useColorMode()
@@ -43,9 +43,6 @@ function Thought({
       _hover={{ bg: colorMode === 'dark' ? 'gray.700' : 'gray.200' }}
       _focus={{ boxShadow: 'outline' }}
       mx={individual ? 'auto' : ''}
-      // onClick={
-      //   individual ? () => '' : () => router.replace(`/thoughts/${thought.id}`)
-      // }
     >
       <VStack mx='auto'>
         <Text
@@ -53,11 +50,16 @@ function Thought({
           fontSize='1.2rem'
           wordBreak='break-word'
           textAlign='center'
+          onClick={
+            individual
+              ? () => ''
+              : () => router.replace(`/thoughts/${thought.id}`)
+          }
         >
           {thought.content}
         </Text>
         <Divider width='40vw' borderColor='purple.800' />
-        <ActionButtons likeFunc={like} />
+        <ActionButtons likeFunc={like} count={thought._count} />
       </VStack>
     </Box>
   )

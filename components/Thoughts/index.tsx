@@ -5,7 +5,9 @@ import Thought from './Thought'
 function Thoughts({
   thoughts,
 }: {
-  thoughts: { id: string; content: string }[] | undefined
+  thoughts:
+    | { id: string; content: string; _count: { likes: number } }[]
+    | undefined
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
@@ -25,23 +27,6 @@ function Thoughts({
           />
         ))}
       </VStack>
-      <Button
-        onClick={async () => {
-          console.log('lel')
-          const response = await fetch(
-            '/api/like/c154fe94-fd7e-48ef-97a1-490d1172fc10',
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-            }
-          )
-
-          const data = await response.json()
-          console.log(data)
-        }}
-      >
-        lel
-      </Button>
     </>
   )
 }
