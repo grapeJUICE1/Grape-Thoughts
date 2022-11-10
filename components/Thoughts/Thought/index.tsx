@@ -21,9 +21,20 @@ function Thought({
     })
     const data = await response.json()
 
-    if (data.newThought) {
-      console.log(data)
-      setThought(data.newThought)
+    if (data.status === 'success') {
+      if (data.type === 'like') {
+        const newThought = {
+          ...thought,
+          _count: { likes: thought._count.likes + 1 },
+        }
+        setThought(newThought)
+      } else if (data.type === 'unlike') {
+        const newThought = {
+          ...thought,
+          _count: { likes: thought._count.likes - 1 },
+        }
+        setThought(newThought)
+      }
     }
   }
   return (

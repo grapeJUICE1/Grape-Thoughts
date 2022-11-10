@@ -27,25 +27,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         })
 
         if (likeExists) {
-          const like = await prisma.like.delete({
+          await prisma.like.delete({
             where: { id: likeExists.id },
-            include: {
-              thought: { include: { _count: { select: { likes: true } } } },
-            },
           })
           return res.status(201).json({
             status: 'success',
             message: 'Unliked the thought successfully',
-            newThought: like.thought,
+            type: 'unlike',
           })
         } else {
           const like = await prisma.like.create({
             data: {
               user: { connect: { email: session?.user?.email! } },
               thought: { connect: { id: id as string } },
-            },
-            include: {
-              thought: { include: { _count: { select: { likes: true } } } },
             },
           })
           if (!like) {
@@ -57,7 +51,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           return res.status(201).json({
             status: 'success',
             message: 'Liked the thought successfully',
-            newThought: like.thought,
+            type: 'like',
           })
         }
       }
