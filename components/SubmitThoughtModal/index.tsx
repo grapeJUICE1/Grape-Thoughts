@@ -24,7 +24,6 @@ function SubmitThoughtModal({
 }) {
   const [contentValue, setContentValue] = useState('')
   const [contentMsg, setContentMsg] = useState('')
-  const [formMsg, setFormMsg] = useState({ success: true, msg: '' })
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true)
   const [inputDisabled, setInputDisabled] = useState(false)
   const router = useRouter()
@@ -53,7 +52,6 @@ function SubmitThoughtModal({
           status: 'success',
           duration: 1000,
         })
-        // setFormMsg({ success: true, msg: 'Thought created successfully' })
         setTimeout(() => router.replace(`/thoughts/${data.thoughtId}`), 1000)
       } else if (data.status === 'fail') {
         toast({
@@ -61,7 +59,6 @@ function SubmitThoughtModal({
           status: 'error',
           duration: 1000,
         })
-        // setFormMsg({ success: false, msg: data.message })
       }
     } else if (!response.ok) {
       toast({
@@ -69,7 +66,6 @@ function SubmitThoughtModal({
         status: 'error',
         duration: 1000,
       })
-      // setFormMsg({ success: false, msg: 'Something went wrong' })
     }
     setSubmitButtonDisabled(false)
     setInputDisabled(false)
@@ -137,16 +133,6 @@ function SubmitThoughtModal({
           >
             Submit
           </Button>
-
-          {formMsg.msg && (
-            <Text
-              ml={6}
-              mb={10}
-              color={formMsg.success ? 'green.400' : 'red.500'}
-            >
-              {formMsg.msg}
-            </Text>
-          )}
         </form>
       </ModalContent>
     </Modal>
