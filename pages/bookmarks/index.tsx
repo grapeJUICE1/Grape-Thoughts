@@ -1,6 +1,6 @@
 import { getToken } from 'next-auth/jwt'
-import Bookmarks from '../../components/Bookmarks'
 import Thoughts from '../../components/Thoughts'
+import { getBookmarksOfUser } from '../../lib/crud/bookmarks'
 
 type PageProps = {
   thoughts:
@@ -14,49 +14,21 @@ type PageProps = {
         }
       }[]
     | undefined
+  count: number
 }
 
-function bookmarks({ thoughts }: PageProps) {
-  return <Thoughts thoughts={thoughts} areBookmarks={true} />
+function bookmarks({ thoughts, count }: PageProps) {
+  return <Thoughts thoughts={thoughts} areBookmarks={true} count={count} />
 }
 
 export default bookmarks
 
 export const getServerSideProps = async ({ req }: any) => {
-  const session = await getToken({ req })
-  if (!session?.email) {
-    return {
-      redirect: {
-        destination: '/',
-      },
-    }
-  }
-
-  const bookmarks = await prisma?.bookmark.findMany({
-    where: { user: { email: session.email } },
-    orderBy: [{ createdAt: 'desc' }],
-    select: {
-      thought: {
-        select: {
-          id: true,
-          content: true,
-          createdAt: false,
-          updatedAt: false,
-          _count: { select: { likes: true, bookmarks: true } },
-          likes: {
-            where: { user: { email: session.email } },
-            select: { id: true },
-          },
-          bookmarks: {
-            where: { user: { email: session.email } },
-            select: { id: true },
-          },
-        },
-      },
-    },
-  })
+  const result = await getBookmarksOfUser(req)
+  if (result.redirect) return result
   const _props: PageProps = {
-    thoughts: bookmarks,
+    thoughts: result.thoughts,
+    count: result.count,
   }
   return { props: _props }
 }

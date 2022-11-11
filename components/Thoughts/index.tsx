@@ -10,6 +10,7 @@ import Thought from './Thought'
 
 function Thoughts({
   thoughts,
+  count,
   areBookmarks = false,
   areUserThoughts = false,
 }: {
@@ -33,8 +34,10 @@ function Thoughts({
     | undefined
   areBookmarks?: boolean
   areUserThoughts?: boolean
+  count: number
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  console.log(count)
   return (
     <>
       {areBookmarks ? (
