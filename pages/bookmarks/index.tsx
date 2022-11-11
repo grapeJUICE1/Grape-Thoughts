@@ -1,4 +1,4 @@
-import Bookmarks from '../components/Bookmarks'
+import Bookmarks from '../../components/Bookmarks'
 
 function bookmarks() {
   return <Bookmarks />

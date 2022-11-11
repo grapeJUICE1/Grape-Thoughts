@@ -35,10 +35,10 @@ function Me() {
           </Heading>
 
           <HStack justifyContent='center' mt={10}>
-            <Button as={Link} href='/thoughts' mx={5} color='purple.500'>
+            <Button as={Link} href='/thoughts/me' mx={5} color='purple.500'>
               Your Thoughts
             </Button>
-            <Button mx={5} color='purple.500' as={Link} href='/bookmarks'>
+            <Button mx={5} color='purple.500' as={Link} href='/bookmarks/me'>
               Your Bookmarks
             </Button>
           </HStack>
