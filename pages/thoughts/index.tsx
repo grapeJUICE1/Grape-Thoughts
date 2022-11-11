@@ -15,7 +15,7 @@ type PageProps = {
   count: number
 }
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const result = await getThoughts(req, 10, undefined)
+  const result = await getThoughts(req, 10, 0)
   const _props: PageProps = {
     thoughts: result.thoughts,
     count: result.count,

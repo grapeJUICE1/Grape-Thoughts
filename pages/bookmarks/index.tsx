@@ -23,10 +23,12 @@ function bookmarks({ thoughts, count }: PageProps) {
 export default bookmarks
 
 export const getServerSideProps = async ({ req }: any) => {
-  const result = await getBookmarksOfUser(req, 10, undefined)
-  if (result.redirect) return result
+  const result = await getBookmarksOfUser(req, 10, 0)
+  if (result?.redirect) return result
   const _props: PageProps = {
+    //@ts-ignore
     thoughts: result.thoughts,
+    //@ts-ignore
     count: result.count,
   }
   return { props: _props }

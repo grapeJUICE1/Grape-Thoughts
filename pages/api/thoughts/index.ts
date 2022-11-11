@@ -3,6 +3,7 @@ import { unstable_getServerSession } from 'next-auth'
 
 import { authOptions } from '../auth/[...nextauth]'
 import prisma from '../../../lib/prisma'
+import { getThoughts } from '../../../lib/crud/thoughts'
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
@@ -84,8 +85,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           .status(500)
           .json({ status: 'fail', message: 'Something went wrong' })
       }
-      const thoughts = await prisma.thought.findMany()
-      return thoughts
+
+      const { page } = req.query
+      console.log(req.query)
+      const result = await getThoughts(
+        req,
+        10,
+        typeof Number(page) === 'number' ? Number(page) * 10 : 0
+      )
+      const thoughts = result.thoughts ? result.thoughts : undefined
+      const count = result.count ? result.count : 0
+      return res
+        .status(200)
+        .json({ status: 'success', data: { thoughts: thoughts, count: count } })
     } catch (err) {
       console.log(err)
       return res

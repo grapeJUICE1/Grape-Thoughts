@@ -3,21 +3,26 @@ import { getToken } from 'next-auth/jwt'
 export async function getBookmarksOfUser(
   req: any,
   take: number,
-  cursor: { id: string } | undefined
+  skip: number,
+  getServerSideProps = true
 ) {
   const session = await getToken({ req })
   if (!session?.email) {
-    return {
-      redirect: {
-        destination: '/',
-      },
+    if (getServerSideProps) {
+      return {
+        redirect: {
+          destination: '/',
+        },
+      }
+    } else {
+      return
     }
   }
 
   const bookmarks = await prisma?.$transaction([
     prisma?.bookmark.findMany({
       take,
-      cursor,
+      skip,
       where: { user: { email: session.email } },
       orderBy: [{ createdAt: 'desc' }],
       select: {
