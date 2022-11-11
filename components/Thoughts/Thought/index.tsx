@@ -17,6 +17,7 @@ function Thought({
   initialThought: {
     id: string
     content: string
+    likes?: {}
     _count: { likes: number; bookmarks: number }
   }
   individual: boolean
@@ -47,6 +48,7 @@ function Thought({
       if (data.type === 'like') {
         const newThought = {
           ...thought,
+          likes: [1],
           _count: {
             likes: thought._count.likes + 1,
             bookmarks: thought._count.bookmarks,
@@ -56,6 +58,7 @@ function Thought({
       } else if (data.type === 'unlike') {
         const newThought = {
           ...thought,
+          likes: undefined,
           _count: {
             likes: thought._count.likes - 1,
             bookmarks: thought._count.bookmarks,
@@ -141,6 +144,8 @@ function Thought({
         <ActionButtons
           likeFunc={like}
           bookmarkFunc={bookmark}
+          userDidLike={thought.likes}
+          userDidBookmark={''}
           count={thought._count}
         />
       </VStack>
