@@ -42,7 +42,6 @@ function Thoughts({
   areUserThoughts?: boolean
   count: number
 }) {
-    console.log(thoughts , count)
   const [getPage, setGetPage] = useState(false)
   const [page, setPage] = useState(0)
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -53,11 +52,16 @@ function Thoughts({
     if (getPage) {
       toast.closeAll()
       toast({ description: 'Please wait for a few seconds', duration: null })
-      return areUserThoughts?`/api/thoughts/me?page=${page-1}`:`/api/thoughts?page=${page - 1}`
+      if(areUserThoughts)return`/api/thoughts/me?page=${page-1}`
+      else if(areBookmarks) return `/api/bookmark/?page=${page-1}`
+      else return`/api/thoughts?page=${page - 1}`
     }
     return null
   }, fetcher)
 
+  if(error){
+    setGetPage(false)
+  }
   if (response) {
     if (response.data.thoughts) {
       toast.closeAll()
@@ -66,6 +70,7 @@ function Thoughts({
     }
     setGetPage(false)
   }
+
   return (
     <>
       {areBookmarks ? (

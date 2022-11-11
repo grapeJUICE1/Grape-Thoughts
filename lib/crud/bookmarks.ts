@@ -4,7 +4,8 @@ export async function getBookmarksOfUser(
   req: any,
   take: number,
   skip: number,
-  getServerSideProps = true
+  getServerSideProps = true,
+  res:any = undefined
 ) {
   const session = await getToken({ req })
   if (!session?.email) {
@@ -15,7 +16,7 @@ export async function getBookmarksOfUser(
         },
       }
     } else {
-      return
+      return res.status(401).json({status:'fail' , message:'You are not authenticated'})
     }
   }
 
@@ -47,6 +48,7 @@ export async function getBookmarksOfUser(
     }),
     prisma.bookmark.count({ where: { user: { email: session.email } } }),
   ])
+
   if (bookmarks) {
     return { count: bookmarks[1], thoughts: bookmarks[0] }
   } else {
