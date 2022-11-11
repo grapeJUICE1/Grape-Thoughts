@@ -14,7 +14,11 @@ export default thougth
 export async function getServerSideProps({ params }: Params) {
   const thought = await prisma?.thought.findUnique({
     where: { id: params.id! },
-    select: { id: true, content: true, _count: { select: { likes: true } } },
+    select: {
+      id: true,
+      content: true,
+      _count: { select: { likes: true, bookmarks: true } },
+    },
   })
 
   return {
