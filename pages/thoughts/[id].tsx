@@ -1,3 +1,4 @@
+import { getToken } from 'next-auth/jwt'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import React from 'react'
 import Thought from '../../components/Thoughts/Thought'
@@ -11,16 +12,32 @@ function thougth({ thought }: any) {
 
 export default thougth
 
-export async function getServerSideProps({ params }: Params) {
-  const thought = await prisma?.thought.findUnique({
-    where: { id: params.id! },
-    select: {
-      id: true,
-      content: true,
-      _count: { select: { likes: true, bookmarks: true } },
-    },
-  })
-
+export async function getServerSideProps({ req, params }: Params) {
+  const session = await getToken({ req })
+  let thought
+  if (session?.email) {
+    thought = await prisma?.thought.findUnique({
+      where: { id: params.id! },
+      select: {
+        id: true,
+        content: true,
+        _count: { select: { likes: true, bookmarks: true } },
+        likes: {
+          where: { user: { email: session.email } },
+          select: { id: true },
+        },
+      },
+    })
+  } else {
+    thought = await prisma?.thought.findUnique({
+      where: { id: params.id! },
+      select: {
+        id: true,
+        content: true,
+        _count: { select: { likes: true, bookmarks: true } },
+      },
+    })
+  }
   return {
     props: {
       thought,
