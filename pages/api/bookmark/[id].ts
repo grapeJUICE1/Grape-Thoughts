@@ -33,7 +33,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           return res.status(201).json({
             status: 'success',
             message: 'Removed bookmark successfully',
-            type: 'unlike',
+            type: 'unBookmark',
           })
         } else {
           const bookmark = await prisma.bookmark.create({
@@ -51,7 +51,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           return res.status(201).json({
             status: 'success',
             message: 'Bookmarked the thought successfully',
-            type: 'like',
+            type: 'bookmark',
           })
         }
       }

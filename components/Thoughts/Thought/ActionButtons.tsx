@@ -3,7 +3,7 @@ import { HStack } from '@chakra-ui/react'
 import Bookmark from '../../../icons/Bookmark'
 import Heart from '../../../icons/Heart'
 
-function ActionButtons({ likeFunc, count }: any) {
+function ActionButtons({ likeFunc, bookmarkFunc, count }: any) {
   return (
     <HStack pb='3' pt='3'>
       <Heart
@@ -25,6 +25,7 @@ function ActionButtons({ likeFunc, count }: any) {
         width='1.5rem'
         fill='none'
         stroke='orange.400'
+        onClick={bookmarkFunc}
       />
       <p>{count.bookmarks}</p>
     </HStack>

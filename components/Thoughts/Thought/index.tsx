@@ -65,6 +65,46 @@ function Thought({
       }
     }
   }
+  async function bookmark() {
+    toast({
+      title: 'Please wait for a few seconds',
+      isClosable: true,
+      duration: null,
+    })
+    const response = await fetch(`/api/bookmark/${thought.id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    const data = await response.json()
+
+    if (data.status === 'success') {
+      toast.closeAll()
+      toast({
+        title: data.message,
+        status: 'success',
+        duration: 1000,
+      })
+      if (data.type === 'bookmark') {
+        const newThought = {
+          ...thought,
+          _count: {
+            likes: thought._count.likes,
+            bookmarks: thought._count.bookmarks + 1,
+          },
+        }
+        setThought(newThought)
+      } else if (data.type === 'unBookmark') {
+        const newThought = {
+          ...thought,
+          _count: {
+            likes: thought._count.likes,
+            bookmarks: thought._count.bookmarks - 1,
+          },
+        }
+        setThought(newThought)
+      }
+    }
+  }
   return (
     <Box
       display='flex'
@@ -98,7 +138,11 @@ function Thought({
           {thought.content}
         </Text>
         <Divider width='40vw' borderColor='purple.800' />
-        <ActionButtons likeFunc={like} count={thought._count} />
+        <ActionButtons
+          likeFunc={like}
+          bookmarkFunc={bookmark}
+          count={thought._count}
+        />
       </VStack>
     </Box>
   )
