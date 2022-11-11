@@ -1,6 +1,10 @@
 import { getToken } from 'next-auth/jwt'
 
-export async function getBookmarksOfUser(req: any) {
+export async function getBookmarksOfUser(
+  req: any,
+  take: number,
+  cursor: { id: string } | undefined
+) {
   const session = await getToken({ req })
   if (!session?.email) {
     return {
@@ -12,6 +16,8 @@ export async function getBookmarksOfUser(req: any) {
 
   const bookmarks = await prisma?.$transaction([
     prisma?.bookmark.findMany({
+      take,
+      cursor,
       where: { user: { email: session.email } },
       orderBy: [{ createdAt: 'desc' }],
       select: {

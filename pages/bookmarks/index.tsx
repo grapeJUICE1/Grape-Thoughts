@@ -1,4 +1,3 @@
-import { getToken } from 'next-auth/jwt'
 import Thoughts from '../../components/Thoughts'
 import { getBookmarksOfUser } from '../../lib/crud/bookmarks'
 
@@ -24,7 +23,7 @@ function bookmarks({ thoughts, count }: PageProps) {
 export default bookmarks
 
 export const getServerSideProps = async ({ req }: any) => {
-  const result = await getBookmarksOfUser(req)
+  const result = await getBookmarksOfUser(req, 10, undefined)
   if (result.redirect) return result
   const _props: PageProps = {
     thoughts: result.thoughts,

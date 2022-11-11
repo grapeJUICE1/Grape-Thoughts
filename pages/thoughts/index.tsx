@@ -1,8 +1,6 @@
 import { GetServerSideProps } from 'next'
-import { getToken } from 'next-auth/jwt'
 import Thoughts from '../../components/Thoughts'
 import { getThoughts } from '../../lib/crud/thoughts'
-import prisma from '../../lib/prisma'
 
 type PageProps = {
   thoughts:
@@ -17,7 +15,7 @@ type PageProps = {
   count: number
 }
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const result = await getThoughts(req)
+  const result = await getThoughts(req, 10, undefined)
   const _props: PageProps = {
     thoughts: result.thoughts,
     count: result.count,

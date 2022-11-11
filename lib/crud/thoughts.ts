@@ -1,11 +1,17 @@
 import { getToken } from 'next-auth/jwt'
 
-export async function getThoughts(req: any) {
+export async function getThoughts(
+  req: any,
+  take: number,
+  cursor: { id: string } | undefined
+) {
   const session = await getToken({ req })
   let thoughts
   if (session?.email) {
     thoughts = await prisma?.$transaction([
       prisma?.thought.findMany({
+        take,
+        cursor,
         orderBy: [{ createdAt: 'desc' }],
         select: {
           id: true,
@@ -28,6 +34,8 @@ export async function getThoughts(req: any) {
   } else {
     thoughts = await prisma?.$transaction([
       prisma?.thought.findMany({
+        take,
+        cursor,
         orderBy: [{ createdAt: 'desc' }],
         select: {
           id: true,
@@ -47,7 +55,11 @@ export async function getThoughts(req: any) {
   }
 }
 
-export async function getThoughtsOfUser(req: any) {
+export async function getThoughtsOfUser(
+  req: any,
+  take: number,
+  cursor: { id: string } | undefined
+) {
   const session = await getToken({ req })
   if (!session?.email) {
     return {
@@ -58,6 +70,8 @@ export async function getThoughtsOfUser(req: any) {
   }
   const thoughts = await prisma?.$transaction([
     prisma.thought.findMany({
+      take,
+      cursor,
       where: { user: { email: session.email } },
       orderBy: [{ createdAt: 'desc' }],
       select: {

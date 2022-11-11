@@ -1,7 +1,5 @@
-import { getToken } from 'next-auth/jwt'
 import Thoughts from '../../components/Thoughts'
 import { getThoughtsOfUser } from '../../lib/crud/thoughts'
-import prisma from '../../lib/prisma'
 
 type PageProps = {
   thoughts:
@@ -17,7 +15,7 @@ type PageProps = {
 }
 
 export const getServerSideProps = async ({ req }: any) => {
-  const result = await getThoughtsOfUser(req)
+  const result = await getThoughtsOfUser(req, 10, undefined)
   if (result.redirect) return result
   const _props: PageProps = {
     thoughts: result.thoughts,
