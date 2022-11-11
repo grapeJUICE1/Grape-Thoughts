@@ -1,5 +1,6 @@
 import { getToken } from 'next-auth/jwt'
 import Bookmarks from '../../components/Bookmarks'
+import Thoughts from '../../components/Thoughts'
 
 type PageProps = {
   thoughts:
@@ -16,7 +17,7 @@ type PageProps = {
 }
 
 function bookmarks({ thoughts }: PageProps) {
-  return <Bookmarks thoughts={thoughts} />
+  return <Thoughts thoughts={thoughts} areBookmarks={true} />
 }
 
 export default bookmarks

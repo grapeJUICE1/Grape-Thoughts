@@ -1,10 +1,17 @@
-import { Button, Center, useDisclosure, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  Center,
+  Heading,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
 import SubmitThoughtModal from '../SubmitThoughtModal'
 import Thought from './Thought'
 
 function Thoughts({
   thoughts,
-  areBookmarks,
+  areBookmarks = false,
+  areUserThoughts = false,
 }: {
   thoughts:
     | {
@@ -24,16 +31,35 @@ function Thoughts({
         }
       }[]
     | undefined
-  areBookmarks: boolean
+  areBookmarks?: boolean
+  areUserThoughts?: boolean
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
-      <Center mt={10}>
-        <Button color='purple.500' onClick={onOpen} alignItems='center'>
-          Submit Thought
-        </Button>
-      </Center>
+      {areBookmarks ? (
+        <Heading mt={10} textAlign='center'>
+          All Bookmarks
+        </Heading>
+      ) : (
+        ''
+      )}
+      {areUserThoughts ? (
+        <Heading mt={10} textAlign='center'>
+          Your Thoughts
+        </Heading>
+      ) : (
+        ''
+      )}
+      {!areBookmarks && !areUserThoughts ? (
+        <Center mt={10}>
+          <Button color='purple.500' onClick={onOpen} alignItems='center'>
+            Submit Thought
+          </Button>
+        </Center>
+      ) : (
+        ''
+      )}
       <SubmitThoughtModal isOpen={isOpen} onClose={onClose} />
       <VStack mt={10}>
         {thoughts?.map((thought) => (

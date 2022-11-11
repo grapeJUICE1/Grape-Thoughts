@@ -1,3 +1,4 @@
+import { Heading } from '@chakra-ui/react'
 import { getToken } from 'next-auth/jwt'
 import Thoughts from '../../components/Thoughts'
 import prisma from '../../lib/prisma'
@@ -48,7 +49,7 @@ export const getServerSideProps = async ({ req }: any) => {
   return { props: _props }
 }
 function userThoughts(props: PageProps) {
-  return <Thoughts thoughts={props.thoughts} />
+  return <Thoughts thoughts={props.thoughts} areUserThoughts={true} />
 }
 
 export default userThoughts
