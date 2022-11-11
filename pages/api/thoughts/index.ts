@@ -87,7 +87,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       }
 
       const { page } = req.query
-      console.log(req.query)
       const result = await getThoughts(
         req,
         10,

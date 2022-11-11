@@ -55,7 +55,8 @@ export async function getThoughtsOfUser(
   req: any,
   take: number,
   skip: number,
-  getServerSideProps = true
+  getServerSideProps = true,
+  res:any = undefined,
 ) {
   const session = await getToken({ req })
   if (!session?.email) {
@@ -66,7 +67,7 @@ export async function getThoughtsOfUser(
         },
       }
     } else {
-      return
+      return res.status(401).json({status:'fail' , message:'You are not authenticated'})
     }
   }
   const thoughts = await prisma?.$transaction([
