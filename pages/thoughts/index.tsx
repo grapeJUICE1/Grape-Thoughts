@@ -23,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   return { props: _props }
 }
 function thoughts({ thoughts, count }: PageProps) {
-  return <Thoughts thoughts={thoughts} count={count} />
+  return <Thoughts thoughts={thoughts} type='thoughts' count={count} />
 }
 
 export default thoughts

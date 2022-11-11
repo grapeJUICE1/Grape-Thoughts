@@ -17,8 +17,7 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json())
 function Thoughts({
   thoughts,
   count,
-  areBookmarks = false,
-  areUserThoughts = false,
+  type
 }: {
   thoughts:
     | {
@@ -37,57 +36,56 @@ function Thoughts({
           _count: { likes: number; bookmarks: number }
         }
       }[]
-    | undefined
-  areBookmarks?: boolean
-  areUserThoughts?: boolean
-  count: number
+    | undefined,
+  type:'thoughts'|'userThoughts'|'bookmarks'
+  count: number,
+
 }) {
   const [getPage, setGetPage] = useState(false)
   const [page, setPage] = useState(0)
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [fetchedThoughts, setFetchedThoughts] = useState([])
+  const [renderedThoughts, setRenderedThoughts] = useState(()=>thoughts)
   const toast = useToast()
 
   const { data: response, error } = useSWR(() => {
     if (getPage) {
       toast.closeAll()
-      toast({ description: 'Please wait for a few seconds', duration: null })
-      if(areUserThoughts)return`/api/thoughts/me?page=${page-1}`
-      else if(areBookmarks) return `/api/bookmark/?page=${page-1}`
+      toast({ description: 'Please wait for a few seconds',isClosable:true ,duration: null })
+      if(type==='userThoughts')return`/api/thoughts/me?page=${page-1}`
+      else if(type==='bookmarks') return `/api/bookmark/?page=${page-1}`
       else return`/api/thoughts?page=${page - 1}`
     }
     return null
   }, fetcher)
 
   if(error){
+    toast.closeAll()
+    toast({description:'Something went wrong'})
+    console.log(error)
     setGetPage(false)
   }
   if (response) {
     if (response.data.thoughts) {
       toast.closeAll()
       toast({ description: 'Fetched data', status: 'success', duration: 1000 })
-      setFetchedThoughts(response.data.thoughts)
+      setRenderedThoughts(response.data.thoughts)
     }
     setGetPage(false)
   }
 
   return (
     <>
-      {areBookmarks ? (
         <Heading mt={10} textAlign='center'>
-          All Bookmarks
+      {
+        type==='thoughts'?
+          'All Thoughts': 
+              type === 'userThoughts'? 
+                'Your Thoughts': 'Your Bookmarks'
+
+
+      }
         </Heading>
-      ) : (
-        ''
-      )}
-      {areUserThoughts ? (
-        <Heading mt={10} textAlign='center'>
-          Your Thoughts
-        </Heading>
-      ) : (
-        ''
-      )}
-      {!areBookmarks && !areUserThoughts ? (
+      {type==='thoughts' ? (
         <Center mt={10}>
           <Button color='purple.500' onClick={onOpen} alignItems='center'>
             Submit Thought
@@ -98,22 +96,13 @@ function Thoughts({
       )}
       <SubmitThoughtModal isOpen={isOpen} onClose={onClose} />
       <VStack mt={10}>
-        {fetchedThoughts.length
-          ? fetchedThoughts.map((thought: any) => (
+        {
+          renderedThoughts?.map((thought: any) => (
               <Thought
                 //@ts-ignore
-                key={areBookmarks ? thought.thought.id! : thought.id}
+                key={type==='bookmarks' ? thought.thought.id! : thought.id}
                 //@ts-ignore
-                initialThought={areBookmarks ? thought.thought : thought}
-                individual={false}
-              />
-            ))
-          : thoughts?.map((thought: any) => (
-              <Thought
-                //@ts-ignore
-                key={areBookmarks ? thought.thought.id! : thought.id}
-                //@ts-ignore
-                initialThought={areBookmarks ? thought.thought : thought}
+                initialThought={type==='bookmarks' ? thought.thought : thought}
                 individual={false}
               />
             ))}

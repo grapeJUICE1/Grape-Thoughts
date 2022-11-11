@@ -17,7 +17,7 @@ type PageProps = {
 }
 
 function bookmarks({ thoughts, count }: PageProps) {
-  return <Thoughts thoughts={thoughts} areBookmarks={true} count={count} />
+  return <Thoughts thoughts={thoughts} type='bookmarks' count={count} />
 }
 
 export default bookmarks
