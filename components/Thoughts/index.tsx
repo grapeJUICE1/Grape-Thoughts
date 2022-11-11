@@ -9,7 +9,8 @@ function Thoughts({
     | {
         id: string
         content: string
-        likes?: {}
+        likes?: { id: string }[]
+        bookmarks?: { id: string }[]
         _count: { likes: number; bookmarks: number }
       }[]
     | undefined

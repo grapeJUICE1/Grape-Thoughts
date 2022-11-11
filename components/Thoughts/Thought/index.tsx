@@ -17,7 +17,8 @@ function Thought({
   initialThought: {
     id: string
     content: string
-    likes?: {}
+    likes?: { id: string }[]
+    bookmarks?: { id: string }[]
     _count: { likes: number; bookmarks: number }
   }
   individual: boolean
@@ -48,7 +49,7 @@ function Thought({
       if (data.type === 'like') {
         const newThought = {
           ...thought,
-          likes: [1],
+          likes: [{ id: '1' }],
           _count: {
             likes: thought._count.likes + 1,
             bookmarks: thought._count.bookmarks,
@@ -90,6 +91,7 @@ function Thought({
       if (data.type === 'bookmark') {
         const newThought = {
           ...thought,
+          bookmarks: [{ id: '1' }],
           _count: {
             likes: thought._count.likes,
             bookmarks: thought._count.bookmarks + 1,
@@ -99,6 +101,7 @@ function Thought({
       } else if (data.type === 'unBookmark') {
         const newThought = {
           ...thought,
+          bookmarks: undefined,
           _count: {
             likes: thought._count.likes,
             bookmarks: thought._count.bookmarks - 1,
@@ -145,7 +148,7 @@ function Thought({
           likeFunc={like}
           bookmarkFunc={bookmark}
           userDidLike={thought.likes}
-          userDidBookmark={''}
+          userDidBookmark={thought.bookmarks}
           count={thought._count}
         />
       </VStack>

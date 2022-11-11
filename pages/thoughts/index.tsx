@@ -8,7 +8,8 @@ type PageProps = {
     | {
         id: string
         content: string
-        likes?: {}
+        likes?: { id: string }[]
+        bookmarks?: { id: string }[]
         _count: { likes: number; bookmarks: number }
       }[]
     | undefined
@@ -27,6 +28,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
         updatedAt: false,
         _count: { select: { likes: true, bookmarks: true } },
         likes: {
+          where: { user: { email: session.email } },
+          select: { id: true },
+        },
+        bookmarks: {
           where: { user: { email: session.email } },
           select: { id: true },
         },

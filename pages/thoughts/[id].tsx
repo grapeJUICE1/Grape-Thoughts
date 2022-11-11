@@ -26,6 +26,10 @@ export async function getServerSideProps({ req, params }: Params) {
           where: { user: { email: session.email } },
           select: { id: true },
         },
+        bookmarks: {
+          where: { user: { email: session.email } },
+          select: { id: true },
+        },
       },
     })
   } else {
