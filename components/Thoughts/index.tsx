@@ -4,6 +4,7 @@ import Thought from './Thought'
 
 function Thoughts({
   thoughts,
+  areBookmarks,
 }: {
   thoughts:
     | {
@@ -13,7 +14,17 @@ function Thoughts({
         bookmarks?: { id: string }[]
         _count: { likes: number; bookmarks: number }
       }[]
+    | {
+        thought: {
+          id: string
+          content: string
+          likes?: { id: string }[]
+          bookmarks?: { id: string }[]
+          _count: { likes: number; bookmarks: number }
+        }
+      }[]
     | undefined
+  areBookmarks: boolean
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
@@ -27,8 +38,10 @@ function Thoughts({
       <VStack mt={10}>
         {thoughts?.map((thought) => (
           <Thought
-            key={thought.id}
-            initialThought={thought}
+            //@ts-ignore
+            key={areBookmarks ? thought.thought.id! : thought.id}
+            //@ts-ignore
+            initialThought={areBookmarks ? thought.thought : thought}
             individual={false}
           />
         ))}

@@ -38,7 +38,7 @@ function Me() {
             <Button as={Link} href='/thoughts/me' mx={5} color='purple.500'>
               Your Thoughts
             </Button>
-            <Button mx={5} color='purple.500' as={Link} href='/bookmarks/me'>
+            <Button mx={5} color='purple.500' as={Link} href='/bookmarks'>
               Your Bookmarks
             </Button>
           </HStack>
