@@ -76,7 +76,6 @@ function SubmitThoughtModal({
     evt.preventDefault()
     setSubmitButtonDisabled(true)
     setInputDisabled(true)
-    console.log('works')
     await createThought(contentValue)
   }
 

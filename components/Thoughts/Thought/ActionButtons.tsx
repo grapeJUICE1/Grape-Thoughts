@@ -10,7 +10,6 @@ function ActionButtons({
   userDidBookmark,
   count,
 }: any) {
-  console.log(userDidBookmark)
   return (
     <HStack pb='3' pt='3'>
       <Heart

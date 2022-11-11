@@ -4,7 +4,6 @@ import React from 'react'
 import Thought from '../../components/Thoughts/Thought'
 import prisma from '../../lib/prisma'
 function thougth({ thought }: any) {
-  console.log(thought)
   return (
     <>{thought && <Thought initialThought={thought} individual={true} />}</>
   )

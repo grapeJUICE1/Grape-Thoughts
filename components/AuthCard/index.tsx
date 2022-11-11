@@ -35,7 +35,6 @@ function AuthCard() {
   const [successMessage, setSuccessMessage] = useState('')
 
   const router = useRouter()
-  console.log(disableForm)
 
   async function createUser(email: string, password: string) {
     const response = await fetch('/api/auth/signup', {

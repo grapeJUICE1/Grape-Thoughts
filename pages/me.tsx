@@ -13,7 +13,6 @@ import React from 'react'
 
 function Me() {
   const { data: session, status } = useSession({ required: true })
-  console.log(session)
   if (status === 'loading') {
     return (
       <Text textAlign='center' mt={10}>

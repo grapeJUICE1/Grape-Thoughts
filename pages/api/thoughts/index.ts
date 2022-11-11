@@ -8,7 +8,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     try {
       const session = await unstable_getServerSession(req, res, authOptions)
-      console.log(session?.user?.email)
       if (session) {
         if (!prisma) {
           return res.status(500).json({
