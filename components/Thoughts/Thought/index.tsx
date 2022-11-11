@@ -14,7 +14,11 @@ function Thought({
   initialThought,
   individual,
 }: {
-  initialThought: { id: string; content: string; _count: { likes: number } }
+  initialThought: {
+    id: string
+    content: string
+    _count: { likes: number; bookmarks: number }
+  }
   individual: boolean
 }) {
   const { colorMode } = useColorMode()
@@ -22,7 +26,11 @@ function Thought({
   const [thought, setThought] = useState(() => initialThought)
   const toast = useToast()
   async function like() {
-    toast({ title: 'Please wait for a few seconds', isClosable: true })
+    toast({
+      title: 'Please wait for a few seconds',
+      isClosable: true,
+      duration: null,
+    })
     const response = await fetch(`/api/like/${thought.id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -35,18 +43,23 @@ function Thought({
         title: data.message,
         status: 'success',
         duration: 1000,
-        isClosable: true,
       })
       if (data.type === 'like') {
         const newThought = {
           ...thought,
-          _count: { likes: thought._count.likes + 1 },
+          _count: {
+            likes: thought._count.likes + 1,
+            bookmarks: thought._count.bookmarks,
+          },
         }
         setThought(newThought)
       } else if (data.type === 'unlike') {
         const newThought = {
           ...thought,
-          _count: { likes: thought._count.likes - 1 },
+          _count: {
+            likes: thought._count.likes - 1,
+            bookmarks: thought._count.bookmarks,
+          },
         }
         setThought(newThought)
       }

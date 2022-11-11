@@ -26,7 +26,7 @@ function ActionButtons({ likeFunc, count }: any) {
         fill='none'
         stroke='orange.400'
       />
-      <p>Bookmark</p>
+      <p>{count.bookmarks}</p>
     </HStack>
   )
 }

@@ -6,7 +6,11 @@ function Thoughts({
   thoughts,
 }: {
   thoughts:
-    | { id: string; content: string; _count: { likes: number } }[]
+    | {
+        id: string
+        content: string
+        _count: { likes: number; bookmarks: number }
+      }[]
     | undefined
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure()

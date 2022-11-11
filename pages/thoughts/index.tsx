@@ -4,7 +4,11 @@ import prisma from '../../lib/prisma'
 
 type PageProps = {
   thoughts:
-    | { id: string; content: string; _count: { likes: number } }[]
+    | {
+        id: string
+        content: string
+        _count: { likes: number; bookmarks: number }
+      }[]
     | undefined
 }
 
@@ -16,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       content: true,
       createdAt: false,
       updatedAt: false,
-      _count: { select: { likes: true } },
+      _count: { select: { likes: true, bookmarks: true } },
     },
   })
   const _props: PageProps = {

@@ -32,6 +32,7 @@ function SubmitThoughtModal({
     toast({
       title: 'Please wait for a few seconds',
       isClosable: true,
+      duration: null,
     })
     const response = await fetch('/api/thoughts', {
       method: 'POST',
