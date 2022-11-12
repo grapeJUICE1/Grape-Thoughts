@@ -13,6 +13,7 @@ import ActionButtons from './ActionButtons'
 function Thought({
   initialThought,
   individual,
+  isAuthenticated,
 }: {
   initialThought: {
     id: string
@@ -22,12 +23,22 @@ function Thought({
     _count: { likes: number; bookmarks: number }
   }
   individual: boolean
+  isAuthenticated: boolean
 }) {
   const { colorMode } = useColorMode()
   const router = useRouter()
   const [thought, setThought] = useState(() => initialThought)
   const toast = useToast()
   async function like() {
+    if (!isAuthenticated) {
+      toast({
+        title: 'Please login/signup to continue',
+        isClosable: true,
+        status: 'error',
+        duration: 2000,
+      })
+      return
+    }
     toast({
       title: 'Please wait for a few seconds',
       isClosable: true,
@@ -70,6 +81,15 @@ function Thought({
     }
   }
   async function bookmark() {
+    if (!isAuthenticated) {
+      toast({
+        title: 'Please login/signup to continue',
+        isClosable: true,
+        status: 'error',
+        duration: 2000,
+      })
+      return
+    }
     toast({
       title: 'Please wait for a few seconds',
       isClosable: true,

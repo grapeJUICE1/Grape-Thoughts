@@ -50,7 +50,7 @@ function Me() {
             mt='5 !important'
             mx={5}
             color='purple.500'
-            onClick={() => signOut({ callbackUrl: window.location.host })}
+            onClick={() => signOut({ callbackUrl: window.location.origin })}
           >
             Logout
           </Button>

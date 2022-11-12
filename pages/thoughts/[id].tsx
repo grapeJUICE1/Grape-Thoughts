@@ -6,7 +6,7 @@ import Thought from '../../components/Thoughts/Thought'
 import prisma from '../../lib/prisma'
 import { CopyIcon } from '@chakra-ui/icons'
 import Head from 'next/head'
-function IndividualThoughtPage({ thought }: any) {
+function IndividualThoughtPage({ thought, isAuthenticated }: any) {
   const toast = useToast()
   return (
     <>
@@ -31,7 +31,11 @@ function IndividualThoughtPage({ thought }: any) {
           </Head>
           <Center>
             <VStack>
-              <Thought initialThought={thought} individual={true} />
+              <Thought
+                initialThought={thought}
+                individual={true}
+                isAuthenticated={isAuthenticated ? true : false}
+              />
               <Button
                 color='purple.600'
                 onClick={() => {
@@ -90,6 +94,7 @@ export async function getServerSideProps({ req, params }: Params) {
   return {
     props: {
       thought,
+      isAuthenticated: session,
     },
   }
 }
