@@ -5,7 +5,7 @@ import React from 'react'
 import Thought from '../../components/Thoughts/Thought'
 import prisma from '../../lib/prisma'
 import { CopyIcon } from '@chakra-ui/icons'
-function thougth({ thought }: any) {
+function IndividualThoughtPage({ thought }: any) {
   const toast = useToast()
   return (
     <>
@@ -42,7 +42,7 @@ function thougth({ thought }: any) {
   )
 }
 
-export default thougth
+export default IndividualThoughtPage
 
 export async function getServerSideProps({ req, params }: Params) {
   const session = await getToken({ req })
