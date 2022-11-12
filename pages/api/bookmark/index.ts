@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getBookmarksOfUser } from '../../../lib/crud/bookmarks'
-
+import prisma from '../../../lib/prisma'
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     try {

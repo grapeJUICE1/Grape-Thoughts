@@ -1,11 +1,12 @@
 import { getToken } from 'next-auth/jwt'
+import prisma from '../../lib/prisma'
 
 export async function getBookmarksOfUser(
   req: any,
   take: number,
   skip: number,
   getServerSideProps = true,
-  res:any = undefined
+  res: any = undefined
 ) {
   const session = await getToken({ req })
   if (!session?.email) {
@@ -16,7 +17,9 @@ export async function getBookmarksOfUser(
         },
       }
     } else {
-      return res.status(401).json({status:'fail' , message:'You are not authenticated'})
+      return res
+        .status(401)
+        .json({ status: 'fail', message: 'You are not authenticated' })
     }
   }
 

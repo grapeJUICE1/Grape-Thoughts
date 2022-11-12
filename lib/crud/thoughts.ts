@@ -1,4 +1,5 @@
 import { getToken } from 'next-auth/jwt'
+import prisma from '../../lib/prisma'
 
 export async function getThoughts(req: any, take: number, skip: number) {
   const session = await getToken({ req })
@@ -56,7 +57,7 @@ export async function getThoughtsOfUser(
   take: number,
   skip: number,
   getServerSideProps = true,
-  res:any = undefined,
+  res: any = undefined
 ) {
   const session = await getToken({ req })
   if (!session?.email) {
@@ -67,7 +68,9 @@ export async function getThoughtsOfUser(
         },
       }
     } else {
-      return res.status(401).json({status:'fail' , message:'You are not authenticated'})
+      return res
+        .status(401)
+        .json({ status: 'fail', message: 'You are not authenticated' })
     }
   }
   const thoughts = await prisma?.$transaction([
