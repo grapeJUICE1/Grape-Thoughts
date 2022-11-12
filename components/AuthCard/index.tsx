@@ -10,7 +10,9 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react'
+
 import { SyntheticEvent, useRef, useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
@@ -31,12 +33,18 @@ function AuthCard() {
 
   const emailInputRef = useRef<HTMLInputElement>(null)
   const passwordInputRef = useRef<HTMLInputElement>(null)
-
-  const [successMessage, setSuccessMessage] = useState('')
+  const formRef = useRef<HTMLFormElement>(null)
 
   const router = useRouter()
+  const toast = useToast()
 
   async function createUser(email: string, password: string) {
+    toast.closeAll()
+    toast({
+      description: 'Please wait for a few seconds',
+      duration: null,
+      isClosable: true,
+    })
     const response = await fetch('/api/auth/signup', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
@@ -48,15 +56,30 @@ function AuthCard() {
     const data = await response.json()
 
     if (!response.ok) {
-      if (data.path === 'email') {
-        setEmailErrorMsg(data.message!)
-      }
-      if (data.path === 'password') {
-        setPasswordErrorMsg(data.message)
+      if (data.path) {
+        if (data.path === 'email') {
+          setEmailErrorMsg(data.message!)
+        }
+        if (data.path === 'password') {
+          setPasswordErrorMsg(data.message)
+        }
+      } else {
+        toast.closeAll()
+        toast({
+          description: 'Something went wrong , please try again',
+          status: 'error',
+          duration: 2000,
+        })
       }
     } else {
-      setSuccessMessage('Signup Successful')
-      setTimeout(() => router.replace('/thoughts'), 1000)
+      toast.closeAll()
+      toast({
+        description: 'Signup successful, redirecting to login ..',
+        status: 'success',
+        duration: 1000,
+      })
+      formRef?.current?.reset()
+      setAuthType('login')
     }
   }
   async function submitHandler(evt: SyntheticEvent) {
@@ -98,6 +121,12 @@ function AuthCard() {
     }
 
     if (authType === 'login') {
+      toast.closeAll()
+      toast({
+        description: 'Please wait for a few seconds',
+        duration: null,
+        isClosable: true,
+      })
       const result = await signIn('credentials', {
         redirect: false,
         email: email,
@@ -108,7 +137,12 @@ function AuthCard() {
         setPasswordErrorMsg(result.error)
 
       if (result?.ok) {
-        setSuccessMessage(`Login successful`)
+        toast.closeAll()
+        toast({
+          description: 'Login successful',
+          status: 'success',
+          duration: 1000,
+        })
         setTimeout(() => router.replace('/thoughts'), 1000)
       }
     } else {
@@ -136,7 +170,7 @@ function AuthCard() {
           p={8}
         >
           <Stack spacing={4}>
-            <form onSubmit={submitHandler}>
+            <form ref={formRef} onSubmit={submitHandler}>
               <FormControl id='email'>
                 <FormLabel>Email address</FormLabel>
 
@@ -192,9 +226,6 @@ function AuthCard() {
                   Switch to {authType === 'login' ? 'Sign up' : 'Log in'}
                 </Button>
               </Stack>
-              {successMessage && (
-                <Text color='green.400'>{successMessage}</Text>
-              )}
             </form>
           </Stack>
         </Box>
