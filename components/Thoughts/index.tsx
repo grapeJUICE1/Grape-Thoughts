@@ -3,6 +3,7 @@ import {
   Center,
   Flex,
   Heading,
+  Spinner,
   useDisclosure,
   useToast,
   VStack,
@@ -41,38 +42,45 @@ function Thoughts({
   count: number,
 
 }) {
+
+  
   const [getPage, setGetPage] = useState(false)
   const [page, setPage] = useState(0)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [renderedThoughts, setRenderedThoughts] = useState(()=>thoughts)
+  const [finalCount , setFinalCount] = useState(()=> count)
+  
   const toast = useToast()
 
   const { data: response, error } = useSWR(() => {
     if (getPage) {
-      toast.closeAll()
-      toast({ description: 'Please wait for a few seconds',isClosable:true ,duration: null })
       if(type==='userThoughts')return`/api/thoughts/me?page=${page-1}`
       else if(type==='bookmarks') return `/api/bookmark/?page=${page-1}`
       else return`/api/thoughts?page=${page - 1}`
-    }
+    } if(type==='userThoughts'){
+        if(!renderedThoughts) {
+          return '/api/thoughts/me?page=0'
+        }
+    }else if(type === 'bookmarks'){
+      if(!renderedThoughts){
+          return '/api/bookmark?page=0'
+      }
+      }
     return null
   }, fetcher)
 
   if(error){
-    toast.closeAll()
-    toast({description:'Something went wrong'})
-    console.log(error)
-    setGetPage(false)
-  }
-  if (response) {
-    if (response.data.thoughts) {
-      toast.closeAll()
-      toast({ description: 'Fetched data', status: 'success', duration: 1000 })
-      setRenderedThoughts(response.data.thoughts)
-    }
+    toast({description:'Something went wrong'  ,status:'error' ,isClosable:true})
     setGetPage(false)
   }
 
+  if (response) {
+    if (response.data.thoughts) {
+      setRenderedThoughts(response.data.thoughts)
+      setFinalCount(response.data.count)
+    }
+    setGetPage(false)
+  }
   return (
     <>
         <Heading mt={10} textAlign='center'>
@@ -97,7 +105,8 @@ function Thoughts({
       <SubmitThoughtModal isOpen={isOpen} onClose={onClose} />
       <VStack mt={10}>
         {
-          renderedThoughts?.map((thought: any) => (
+          getPage?<Spinner/>:renderedThoughts?
+          renderedThoughts.map((thought: any) => (
               <Thought
                 //@ts-ignore
                 key={type==='bookmarks' ? thought.thought.id! : thought.id}
@@ -105,13 +114,13 @@ function Thoughts({
                 initialThought={type==='bookmarks' ? thought.thought : thought}
                 individual={false}
               />
-            ))}
+            )):<Spinner/>}
       </VStack>
       <Flex w='full' p={50} alignItems='center' justifyContent='center'>
         <Pagination
           defaultCurrent={1}
           current={page}
-          total={count}
+          total={finalCount}
           pageSize={10}
           paginationProps={{
             display: 'flex',
