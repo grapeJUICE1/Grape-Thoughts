@@ -1,11 +1,44 @@
+import { Button, Center, Flex, useToast, VStack } from '@chakra-ui/react'
 import { getToken } from 'next-auth/jwt'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import React from 'react'
 import Thought from '../../components/Thoughts/Thought'
 import prisma from '../../lib/prisma'
+import { CopyIcon } from '@chakra-ui/icons'
 function thougth({ thought }: any) {
+  const toast = useToast()
   return (
-    <>{thought && <Thought initialThought={thought} individual={true} />}</>
+    <>
+      {thought ? (
+        <Flex
+          width={'100vw'}
+          height={'90vh'}
+          alignContent={'center'}
+          justifyContent={'center'}
+        >
+          <Center>
+            <VStack>
+              <Thought initialThought={thought} individual={true} />
+              <Button
+                color='purple.600'
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href)
+                  toast({
+                    description: 'copied to clipboard',
+                    status: 'success',
+                    duration: 1000,
+                  })
+                }}
+              >
+                <CopyIcon mr={3} /> Share this thought
+              </Button>
+            </VStack>
+          </Center>
+        </Flex>
+      ) : (
+        <p>Thought with that id not found</p>
+      )}
+    </>
   )
 }
 
