@@ -5,6 +5,7 @@ import React from 'react'
 import Thought from '../../components/Thoughts/Thought'
 import prisma from '../../lib/prisma'
 import { CopyIcon } from '@chakra-ui/icons'
+import Head from 'next/head'
 function IndividualThoughtPage({ thought }: any) {
   const toast = useToast()
   return (
@@ -16,6 +17,18 @@ function IndividualThoughtPage({ thought }: any) {
           alignContent={'center'}
           justifyContent={'center'}
         >
+          <Head>
+            <title>Thought</title>
+            <meta property='og:title' content='Thought' />
+            <meta property='twitter:title' content='Thought' />
+            <meta property='og:description' content={`${thought.content}`} />
+            <meta
+              property='twitter:description'
+              content={`${thought.content}`}
+            />
+            <meta property='description' content={`${thought.content}`} />
+            <meta property='og:type' content='article' />
+          </Head>
           <Center>
             <VStack>
               <Thought initialThought={thought} individual={true} />

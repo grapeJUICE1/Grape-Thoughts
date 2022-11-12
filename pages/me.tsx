@@ -8,6 +8,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { signOut, useSession } from 'next-auth/react'
+import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
 
@@ -28,6 +29,9 @@ function Me() {
       alignContent='center'
       justifyContent='center'
     >
+      <Head>
+        <title>Your Thoughts</title>
+      </Head>
       <Center>
         <VStack>
           <Heading textAlign='center'>

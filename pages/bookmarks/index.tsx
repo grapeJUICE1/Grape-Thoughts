@@ -1,8 +1,16 @@
 import { getToken } from 'next-auth/jwt'
+import Head from 'next/head'
 import Thoughts from '../../components/Thoughts'
 
 function bookmarks() {
-  return <Thoughts thoughts={undefined} type='bookmarks' count={0} />
+  return (
+    <>
+      <Head>
+        <title>Your Bookmarks</title>
+      </Head>
+      <Thoughts thoughts={undefined} type='bookmarks' count={0} />
+    </>
+  )
 }
 
 export default bookmarks

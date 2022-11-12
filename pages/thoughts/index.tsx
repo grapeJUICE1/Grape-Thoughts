@@ -1,4 +1,5 @@
 import { GetServerSideProps } from 'next'
+import Head from 'next/head'
 import Thoughts from '../../components/Thoughts'
 import { getThoughts } from '../../lib/crud/thoughts'
 
@@ -23,7 +24,14 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   return { props: _props }
 }
 function thoughts({ thoughts, count }: PageProps) {
-  return <Thoughts thoughts={thoughts} type='thoughts' count={count} />
+  return (
+    <>
+      <Head>
+        <title>All Thoughts</title>
+      </Head>
+      <Thoughts thoughts={thoughts} type='thoughts' count={count} />
+    </>
+  )
 }
 
 export default thoughts

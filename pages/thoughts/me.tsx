@@ -1,8 +1,16 @@
 import { getToken } from 'next-auth/jwt'
+import Head from 'next/head'
 import Thoughts from '../../components/Thoughts'
 
 function userThoughts() {
-  return <Thoughts thoughts={undefined} count={0} type='userThoughts' />
+  return (
+    <>
+      <Head>
+        <title>Your Thoughts</title>
+      </Head>
+      <Thoughts thoughts={undefined} count={0} type='userThoughts' />
+    </>
+  )
 }
 
 export default userThoughts
