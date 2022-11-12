@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>Burgers On You<h1>
+  <h1>Grape Thoughts<h1>
 </div>
 
 Live at : [https://grape-thoughts.vercel.app/](https://grape-thoughts.vercel.app/)
